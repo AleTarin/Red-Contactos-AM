@@ -8,7 +8,7 @@ Aplicación móvil que apoya al AM en su vida diaria para mantenerlo en contacto
 ---------------------------------------------------
 ### Datos institucionales
 Proyecto de la clase -  Desarrollo de Aplicaciones Moviles
-Instructor: Martha Sordia 
+Instructor: Martha Sordia Salinas
 -----------------------------------------------------
 ### Autores
 **Alejandro De la Cruz Tarin**
