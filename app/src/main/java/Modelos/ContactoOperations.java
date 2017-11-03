@@ -109,7 +109,9 @@ public class ContactoOperations {
                     contact = new Contacto(Integer.parseInt(cursor.getString(0)),
                             cursor.getString(1),
                             cursor.getString(2),
-                            cursor.getBlob(3));
+                            cursor.getBlob(3),
+                            cursor.getString(4));
+
                     listaContactos.add(contact);
                 } while (cursor.moveToNext());
             }

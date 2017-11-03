@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <ImageView android:layout_width="60dp" android:layout_height="60dp" android:id="@+id/iv_foto_row" android:src="@mipmap/ic_launcher"/>
+    <LinearLayout android:orientation="vertical" android:layout_width="171dp" android:layout_height="66dp">
+        <TextView android:id="@+id/tv_id_row" android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="@string/id_contacto" android:textColor="@android:color/black"/>
+        <TextView android:id="@+id/tv_nombre_row" android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="@string/nombre_contacto" android:textColor="@android:color/black"/>
+        <TextView android:id="@+id/tv_telefono_row" android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="@string/telefono_contacto" android:textColor="@android:color/black"/>
+    </LinearLayout>
+</LinearLayout>
