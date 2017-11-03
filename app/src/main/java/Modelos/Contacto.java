@@ -10,6 +10,7 @@ public class Contacto {
     private String sTelefono;
     private byte[] byPicture;
 
+
     public Contacto(long id, String sName, String sTelefono, byte[] byPicture, String sCategoria) {
         this.id = id;
         this.sName = sName;

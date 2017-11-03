@@ -1,5 +1,6 @@
 package Modelos;
 
+
 /**
  * Created by Alejandro De la Cruz on 01-Nov-17.
  */
@@ -16,12 +17,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import java.util.ArrayList;
+import java.util.ArrayList;https://github.com/AleTarin/Red-Contactos-AM/pull/5/conflict?name=app%252Fsrc%252Fmain%252Fjava%252FModelos%252FContactoAdapter.java&base_oid=8d431cc1afd6ee8d38e9842bf28e7f2f9c3f0ae8&head_oid=a4f4588735fbe960fc476020fc6f89d8f077cf70
+
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +45,7 @@ public class ContactoAdapter extends ArrayAdapter<Contacto> {
 
     public ContactoAdapter(Context context, ArrayList<Contacto> contactos){
         super(context, 0 , contactos);
+
     }
 
     @Override
@@ -69,5 +73,6 @@ public class ContactoAdapter extends ArrayAdapter<Contacto> {
 
         return convertView;
     }
+
 
 }
