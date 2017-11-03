@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Red-Contactos-AM</string>
+    <string name="id_contacto">ID:</string>
+    <string name="nombre_contacto">Nombre:</string>
+    <string name="telefono_contacto">Telefono:</string>
+    <string name="tomar_foto">Tomar foto</string>
+    <string name="add_text">Add</string>
+    <string name="find_text">Find</string>
+    <string name="delete_text">Delete</string>
+    <string name="categoria_contacto">Categoria</string>
 </resources>
