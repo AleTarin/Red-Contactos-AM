@@ -23,6 +23,7 @@ public class ContactoDBHelper extends SQLiteOpenHelper {
         String CREATE_CONTACT_TABLE =
                 "CREATE TABLE " + DataBaseSchema.ContactoTable.TABLE_NAME +
                         " ( " +
+
                         DataBaseSchema.ContactoTable._ID + " INTEGER PRIMARY KEY, " +
                         DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE + " TEXT NOT NULL, " +
                         DataBaseSchema.ContactoTable.COLUMN_NAME_TELEFONO + " TEXT NOT NULL, " +

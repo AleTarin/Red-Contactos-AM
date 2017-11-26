@@ -12,6 +12,7 @@ public class Contacto {
     private String sCategoria;
 
 
+
     public Contacto(long id, String sName, String sTelefono, byte[] byPicture, String sCategoria) {
         this.id = id;
         this.sName = sName;

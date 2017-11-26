@@ -113,6 +113,7 @@ public class ContactoOperations {
                             cursor.getString(2),
                             cursor.getBlob(3),
                             cursor.getString(4));
+
                     listaContactos.add(contact);
                 } while (cursor.moveToNext());
             }
