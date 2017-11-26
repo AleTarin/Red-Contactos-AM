@@ -3,24 +3,20 @@ package itesm.mx.red_contactos_am;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Process;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-import Modelos.Contacto;
-import Modelos.ContactoAdapter;
-import Modelos.ContactoOperations;
+import itesm.mx.red_contactos_am.Modelos.Contacto;
+import itesm.mx.red_contactos_am.Modelos.ContactoAdapter;
+import itesm.mx.red_contactos_am.Modelos.ContactoOperations;
 
 public class MainActivity extends ListActivity implements View.OnClickListener{
 
@@ -33,6 +29,7 @@ public class MainActivity extends ListActivity implements View.OnClickListener{
     TextView tvProductID;
     EditText etProductName;
     EditText etQuantity;
+    EditText etCat;
     Button btnAdd;
     Button btnFind;
     Button btnDelete;
@@ -60,12 +57,14 @@ public class MainActivity extends ListActivity implements View.OnClickListener{
         tvProductID = (TextView) findViewById(R.id.tv_productID);
         etProductName = (EditText) findViewById(R.id.et_productName);
         etQuantity = (EditText) findViewById(R.id.et_productQuantity);
+        etCat = (EditText) findViewById(R.id.et_productCategoria);
 
         btnAdd = (Button) findViewById(R.id.btn_add);
         btnFind = (Button) findViewById(R.id.btn_find);
         btnDelete = (Button) findViewById(R.id.btn_delete);
         btnClear = (Button) findViewById(R.id.btn_clear);
         btnTomarFoto = (Button) findViewById(R.id.btn_tomarFoto);
+
 
         btnAdd.setOnClickListener(this);
         btnFind.setOnClickListener(this);
@@ -142,6 +141,7 @@ public class MainActivity extends ListActivity implements View.OnClickListener{
             tvProductID.setText("Record Deleted");
             etProductName.setText("");
             etQuantity.setText("");
+            etCat.setText("");
         }else {
             Toast.makeText(getApplicationContext(), "No match found", Toast.LENGTH_SHORT).show();
             tvProductID.setText("No Match Found");
@@ -165,7 +165,8 @@ public class MainActivity extends ListActivity implements View.OnClickListener{
     private Contacto newProduct() {
         String quantity = etQuantity.getText().toString();
         String name = etProductName.getText().toString();
-        Contacto product = new Contacto(name, quantity, byteArray);
+        String categoria = etCat.getText().toString();
+        Contacto product = new Contacto(name, quantity, byteArray, categoria);
         long id = dao.addContact(product);
         product.setId(id);
 

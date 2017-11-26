@@ -2,13 +2,16 @@
 --------------------------------------------------
 ### Objetivo
 Aplicación móvil que permit e al adulto mayor (AM) acceder de manera sencilla los contactos de teléfono que necesita a la mano de personas o instituciones ( p. ej. cuidador, familiares, farmacias, médicos, vecinos, tiendas, hospitales, teléfonos de emergencias, amigos, clubs, ambulancia, etc. ).
+
 ------------------------------------------------------------------
 ### Descripcion General
 Aplicación móvil que apoya al AM en su vida diaria para mantenerlo en contacto con las personas e instituciones en caso de emergencia. La aplicación estará orientada a personas mayores y con opción para débiles visuales interactuando a través de voz.
+
 ---------------------------------------------------
 ### Datos institucionales
 Proyecto de la clase -  Desarrollo de Aplicaciones Moviles
 Instructor: Martha Sordia Salinas
+
 -----------------------------------------------------
 ### Autores
 **Alejandro De la Cruz Tarin**
@@ -25,10 +28,12 @@ Correo personal: roberto.perezb@outlook.com
 
 **Ivan Escalante**
 Correo institucional: a01380976@itesm.mx    
-Correo personal:    ivan.escalante.m@gmail.com        
+Correo personal:    ivan.escalante.m@gmail.com
+
 ------------------------------------------------------------------
 ### Fecha de ultima modificacion
 03/10/17
+
 -------------------------------------------------------------------
 ### Caracteristicas
 - Aplicacion movil para Android dirigida a AM, sus cuidadores y familiares

@@ -1,4 +1,4 @@
-package db;
+package itesm.mx.red_contactos_am.db;
 
 /**
  * Created by aletarin on 10/12/17.
@@ -6,7 +6,8 @@ package db;
 
 import android.provider.BaseColumns;
 
-public final class DataBaseSchema {
+public final class
+DataBaseSchema {
 
     private DataBaseSchema(){
 

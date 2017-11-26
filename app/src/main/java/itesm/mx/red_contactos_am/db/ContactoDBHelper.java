@@ -1,9 +1,8 @@
-package db;
+package itesm.mx.red_contactos_am.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 /**
@@ -12,8 +11,8 @@ import android.util.Log;
 
 public class ContactoDBHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "ContactoDB.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "ContactoDB.itesm.mx.red_contactos_am.db";
+    private static final int DATABASE_VERSION = 4;
 
     public ContactoDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -36,7 +35,7 @@ public class ContactoDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        String DELETE_CONTACT_TABLE = "DROP TABLE IF EXIST" +
+        String DELETE_CONTACT_TABLE = "DROP TABLE IF EXISTS " +
                 DataBaseSchema.ContactoTable.TABLE_NAME;
         sqLiteDatabase.execSQL(DELETE_CONTACT_TABLE);
         onCreate(sqLiteDatabase);

@@ -1,4 +1,4 @@
-package Modelos;
+package itesm.mx.red_contactos_am.Modelos;
 
 /**
  * Created by aletarin on 10/13/17.
@@ -9,6 +9,8 @@ public class Contacto {
     private String sName;
     private String sTelefono;
     private byte[] byPicture;
+    private String sCategoria;
+
 
     public Contacto(long id, String sName, String sTelefono, byte[] byPicture, String sCategoria) {
         this.id = id;
@@ -18,7 +20,12 @@ public class Contacto {
         this.sCategoria = sCategoria;
     }
 
-    private String sCategoria;
+    public Contacto(String sName, String sTelefono, byte[] byPicture, String sCategoria) {
+        this.sName = sName;
+        this.sTelefono = sTelefono;
+        this.byPicture = byPicture;
+        this.sCategoria = sCategoria;
+    }
 
     public Contacto() {
         this.id = 0;
@@ -33,7 +40,7 @@ public class Contacto {
         this.byPicture = byPicture;
     }
 
-    public Contacto(long id, String sName, String sTelefono, byte[] byPicture) {
+    public Contacto(int id, String sName, String sTelefono, byte[] byPicture) {
         this.id = id;
         this.sName = sName;
         this.sTelefono = sTelefono;
@@ -70,5 +77,13 @@ public class Contacto {
 
     public void setByPicture(byte[] byPicture) {
         this.byPicture = byPicture;
+    }
+
+    public String getsCategoria() {
+        return sCategoria;
+    }
+
+    public void setsCategoria(String sCategoria) {
+        this.sCategoria = sCategoria;
     }
 }

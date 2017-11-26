@@ -1,21 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/LinearLayout1" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" tools:context=".MainActivity">
-    <TableLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="20dp">
-            <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/id_contacto" android:textAppearance="?android:attr/textAppearanceLarge"/>
-            <TextView android:id="@+id/tv_productID" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/tv_productID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ID:"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
         </TableRow>
-        <TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="20dp">
-            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/nombre_contacto" android:textAppearance="?android:attr/textAppearanceLarge"/>
-            <EditText android:id="@+id/et_productName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:ems="10" android:inputType="text">
-                <requestFocus/>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nombre_contacto"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <EditText
+                android:id="@+id/et_productName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text">
+
+                <requestFocus />
             </EditText>
         </TableRow>
-        <TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="20dp">
-            <TextView android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/telefono_contacto" android:textAppearance="?android:attr/textAppearanceLarge"/>
-            <EditText android:id="@+id/et_productQuantity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:ems="10" android:inputType="number"/>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/telefono_contacto"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <EditText
+                android:id="@+id/et_productQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categoria"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <EditText
+                android:id="@+id/et_productCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"/>
         </TableRow>
     </TableLayout>
+
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal">
         <Button android:id="@+id/btn_clear" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear"/>
         <Button android:id="@+id/btn_add" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/add_text"/>
@@ -36,10 +106,11 @@
 
         <Button
             android:id="@+id/btn_tomarFoto"
-            android:layout_width="wrap_content"
+            android:layout_width="82dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="@string/tomar_foto" />
+            android:text="@string/tomar_foto"
+            />
     </LinearLayout>
 
     <ListView android:layout_width="match_parent" android:id="@android:id/list" android:layout_height="wrap_content"></ListView>
