@@ -78,11 +78,34 @@ public class ContactoOperations {
         return result;
     }
 
+    public boolean deleteContactByID(Contacto contacto) {
+        boolean result = false;
+
+        String query = "SELECT * FROM " + DataBaseSchema.ContactoTable.TABLE_NAME +
+                " WHERE " + DataBaseSchema.ContactoTable._ID +
+                " = " + Long.toString(contacto.getId()) ;
+
+        try{
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()){
+                int id = Integer.parseInt(cursor.getString(0));
+                db.delete(DataBaseSchema.ContactoTable.TABLE_NAME,
+                        DataBaseSchema.ContactoTable._ID + " = ?",
+                        new String[]{String.valueOf(id)});
+                result = true;
+            }
+            cursor.close();
+        }catch (SQLiteException e){
+            Log.e("SQLDELETE", e.toString());
+        }
+        return result;
+    }
+
     public  Contacto findContact (String contactName) { // Buscar por nombre
         String query = "Select * FROM " +
                 DataBaseSchema.ContactoTable.TABLE_NAME +
-                " WHERE " + DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE +
-                " = \"" + contactName + "\"";
+                " WHERE lower(" + DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE +
+                ") = \"" + contactName.toLowerCase() + "\"";
         try{
             Cursor cursor = db.rawQuery(query, null);
             contact = null;

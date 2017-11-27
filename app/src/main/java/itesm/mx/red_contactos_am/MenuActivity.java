@@ -165,8 +165,15 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
         Contacto contactoResultado = null;
         String[] arrayResultados = resultado.split(" ");
-        for (String cont : arrayResultados){
-            contactoResultado = dao.findContact(cont);
+
+        for (int i=0; i<arrayResultados.length - 1 ; i++){
+            contactoResultado = dao.findContact(arrayResultados[i]);
+            if (contactoResultado == null){
+                contactoResultado = dao.findContact(arrayResultados[i] + " " + arrayResultados[i + 1]);
+            }
+            if (contactoResultado == null){
+                contactoResultado = dao.findContact(arrayResultados[i] + " " + arrayResultados[i + 1] + " " + arrayResultados[i + 2]);
+            }
             if (contactoResultado != null){
                 if (resultado.toLowerCase().contains("llamar") || resultado.toLowerCase().contains("llama")){
                     Intent callIntent = new Intent(Intent.ACTION_CALL);

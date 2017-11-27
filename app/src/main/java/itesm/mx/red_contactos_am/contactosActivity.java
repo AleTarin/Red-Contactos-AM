@@ -58,6 +58,7 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
         ArrayList<Contacto> listContactos = showProducts();
 
         contactosAdapter = new ContactoAdapterCelda(this, listContactos);
+        contactosAdapter.notifyDataSetChanged();
         gv.setAdapter(contactosAdapter);
 
 
@@ -122,8 +123,9 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
                     .setPositiveButton("Si", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            dao.deleteContact(contacto.getsName());
+                            dao.deleteContactByID(contacto);
                             Toast.makeText(getApplicationContext(), "Contacto eliminado", Toast.LENGTH_SHORT).show();
+                            contactosAdapter.notifyDataSetChanged();
                             finish();
                         }})
                     .setNegativeButton(android.R.string.no, null).show();
@@ -176,32 +178,40 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
     private void busqueda(String resultado) {
         //Arreglos con las palabras clave de busqueda por categoria
         String[] proveedoresKey = {"proveedores", "medicina", "comida", "agua", "hambre", "sed", "medicinas", "medicamento"};
-        String[] saludKey = {"salud", "doctor", "enfermero", "enfermera", "medico", "medicos"};
+        String[] saludKey = {"salud", "doctor", "enfermero", "enfermera", "medico", "medicos" };
         String[] emergenciaKey = {"emergencia", "peligro", "ayuda"};
         String[] familiaKey = {"familia", "hijo", "hija", "hijos", "nietos", "nieto", "nieta", "sobrina", "sobrino", "sobrinos", "hermanos", "hermana", "hermano"};
 
         Contacto contactoResultado = null;
         String[] arrayResultados = resultado.split(" ");
-        for (String cont : arrayResultados) {
-            contactoResultado = dao.findContact(cont);
-            if (contactoResultado != null) {
-                if (resultado.toLowerCase().contains("llamar") || resultado.toLowerCase().contains("llama")) {
+
+        for (int i=0; i<arrayResultados.length - 1 ; i++){
+            contactoResultado = dao.findContact(arrayResultados[i]);
+            if (contactoResultado == null){
+                contactoResultado = dao.findContact(arrayResultados[i] + " " + arrayResultados[i + 1]);
+            }
+            if (contactoResultado == null){
+                contactoResultado = dao.findContact(arrayResultados[i] + " " + arrayResultados[i + 1] + " " + arrayResultados[i + 2]);
+            }
+            if (contactoResultado != null){
+                if (resultado.toLowerCase().contains("llamar") || resultado.toLowerCase().contains("llama")){
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + contactoResultado.getsTelefono()));
+                    callIntent.setData(Uri.parse("tel:"+ contactoResultado.getsTelefono()));
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                         //request permission from user if the app hasn't got the required permission
                         ActivityCompat.requestPermissions(this,
                                 new String[]{Manifest.permission.CALL_PHONE},   //request specific permission from user
                                 10);
                         return;
-                    } else {     //have got permission
-                        try {
+                    }else {     //have got permission
+                        try{
                             startActivity(callIntent);  //call activity and make phone call
-                        } catch (android.content.ActivityNotFoundException ex) {
-                            Toast.makeText(getApplicationContext(), "yourActivity is not founded", Toast.LENGTH_SHORT).show();
+                        }
+                        catch (android.content.ActivityNotFoundException ex){
+                            Toast.makeText(getApplicationContext(),"yourActivity is not founded",Toast.LENGTH_SHORT).show();
                         }
                     }
-                } else {
+                }else{
                     Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
                     intent.putExtra("name", contactoResultado.getsName());
                     intent.putExtra("telefono", contactoResultado.getsTelefono());
@@ -211,6 +221,42 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
                 }
             }
         }
+
+        if (contactoResultado == null){
+            Intent intent;
+            String resultadoMinusculas = resultado.toLowerCase();
+            for (String keyword : saludKey){
+                if (resultadoMinusculas.contains(keyword)){
+                    intent = new Intent(getApplicationContext(), contactosActivity.class);
+                    intent.putExtra("categoria", "Salud");
+                    startActivity(intent);
+                }
+            }
+            for (String keyword : familiaKey){
+                if (resultadoMinusculas.contains(keyword)){
+                    intent = new Intent(getApplicationContext(), contactosActivity.class);
+                    intent.putExtra("categoria", "Familia");
+                    startActivity(intent);
+                }
+            }
+            for (String keyword : emergenciaKey){
+                if (resultadoMinusculas.contains(keyword)){
+                    intent = new Intent(getApplicationContext(), contactosActivity.class);
+                    intent.putExtra("categoria", "Emergencias");
+                    startActivity(intent);
+                }
+            }
+            for (String keyword : proveedoresKey){
+                if (resultadoMinusculas.contains(keyword)){
+                    intent = new Intent(getApplicationContext(), contactosActivity.class);
+                    intent.putExtra("categoria", "Proveedores");
+                    startActivity(intent);
+                }
+            }
+
+            Toast.makeText(getApplicationContext(),"No se encontro ninguna coincidencia",Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
 
