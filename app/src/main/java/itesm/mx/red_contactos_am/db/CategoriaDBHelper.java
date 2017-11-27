@@ -1,4 +1,4 @@
-package db;
+package itesm.mx.red_contactos_am.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,8 +11,8 @@ import android.util.Log;
 
 public class CategoriaDBHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "CategoriaDB.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "CategoriaDB.itesm.mx.red_contactos_am.db";
+    private static final int DATABASE_VERSION = 3;
 
     public CategoriaDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

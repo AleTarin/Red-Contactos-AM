@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="itesm.mx.red_contactos_am.contactosActivity">
+    tools:context="itesm.mx.red_contactos_am.contactosActivity"
+    android:background="@color/colorPrimary">
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridview"
@@ -21,6 +22,7 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp" />
+        tools:layout_editor_absoluteY="8dp"
+        android:clipToPadding="false"/>
 
 </RelativeLayout>

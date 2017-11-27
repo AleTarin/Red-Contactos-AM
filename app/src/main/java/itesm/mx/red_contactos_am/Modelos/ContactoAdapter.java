@@ -1,5 +1,4 @@
-package Modelos;
-
+package itesm.mx.red_contactos_am.Modelos;
 
 /**
  * Created by Alejandro De la Cruz on 01-Nov-17.
@@ -17,22 +16,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-
-import java.util.ArrayList;https://github.com/AleTarin/Red-Contactos-AM/pull/5/conflict?name=app%252Fsrc%252Fmain%252Fjava%252FModelos%252FContactoAdapter.java&base_oid=8d431cc1afd6ee8d38e9842bf28e7f2f9c3f0ae8&head_oid=a4f4588735fbe960fc476020fc6f89d8f077cf70
-
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.view.LayoutInflater;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import Modelos.Contacto;
 import itesm.mx.red_contactos_am.R;
 
 /**
@@ -45,7 +28,6 @@ public class ContactoAdapter extends ArrayAdapter<Contacto> {
 
     public ContactoAdapter(Context context, ArrayList<Contacto> contactos){
         super(context, 0 , contactos);
-
     }
 
     @Override
@@ -58,12 +40,14 @@ public class ContactoAdapter extends ArrayAdapter<Contacto> {
         TextView tvId = (TextView) convertView.findViewById(R.id.tv_id_row);
         TextView tvNombre = (TextView) convertView.findViewById(R.id.tv_nombre_row);
         TextView tvTelefono = (TextView) convertView.findViewById(R.id.tv_telefono_row);
+        TextView tvCategoria = (TextView) convertView.findViewById(R.id.tv_categoria_row);
         ImageView pictureIV = (ImageView) convertView.findViewById(R.id.iv_foto_row);
 
         Contacto contacto = getItem(position);
         tvId.setText(Long.toString(contacto.getId()));
         tvNombre.setText(contacto.getsName());
         tvTelefono.setText(contacto.getsTelefono());
+        tvCategoria.setText(contacto.getsCategoria());
         byte[] image = contacto.getByPicture();
 
         if(image != null){
@@ -73,6 +57,5 @@ public class ContactoAdapter extends ArrayAdapter<Contacto> {
 
         return convertView;
     }
-
 
 }

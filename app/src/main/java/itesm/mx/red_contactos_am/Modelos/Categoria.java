@@ -1,4 +1,4 @@
-package Modelos;
+package itesm.mx.red_contactos_am.Modelos;
 
 /**
  * Created by aletarin on 10/13/17.

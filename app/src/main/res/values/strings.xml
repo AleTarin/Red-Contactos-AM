@@ -8,4 +8,51 @@
     <string name="find_text">Find</string>
     <string name="delete_text">Delete</string>
     <string name="categoria_contacto">Categoria</string>
+    <string name="acceso">Acceso</string>
+    <string-array name="array_mensajes">
+        <item>Ayuda, estoy en problemas</item>
+        <item>Necesito verte</item>
+        <item>Llamame</item>
+        <item>Tengo hambre</item>
+        <item>Tengo sed</item>
+        <item>Me faltan medicinas</item>
+        <item>Que tengas un buen dia</item>
+    </string-array>
+    <string name="title_activity_add_contact">AddContactActivity</string>
+    <string name="emergencia">Emergencia</string>
+    <string name="contactos">Contactos</string>
+    <string name="salud">Salud</string>
+    <string name="proveedores">Proveedores</string>
+    <string name="buscar_foto">Buscar foto</string>
+    <string name="nombre">Nombre</string>
+    <string name="datos_del_administrador">Datos del administrador</string>
+    <string name="cambiar_contrase_a">Cambiar contraseña</string>
+    <string name="actualizar_contacto">Actualizar contacto</string>
+    <string name="borrar_contactos">Borrar contactos</string>
+    <string name="agregar_contacto">Agregar contacto</string>
+    <string name="title_activity_password">PasswordActivity</string>
+    <string name="tvAvisoInfoAdmin">AVISO: Mediante estos datos se configura el botón de marcación rápida del menú
+        y la contraseña al panel de administrador. No olvide la contraseña que ponga y
+        procure que sea un teléfono que pueda ser contestado en caso de emergencias.</string>
+    <string name="informaci_n_del_administrador">Información del administrador</string>
+    <string name="telefono_del_administrador">Telefono del administrador</string>
+    <string name="selecciona_un_mensaje_preestablecido">Selecciona un mensaje preestablecido</string>
+    <string name="o_escribe_un_mensaje">o escribe un mensaje</string>
+    <string name="indicaciones_b_sicas">Indicaciones básicas</string>
+
+    <string name="title_activity_information">InformationActivity</string>
+    <string name="title_mensaje">Mensaje</string>
+    <string name="contenido_mensaje">Mensaje para todas las personas que usen el app</string>
+    <string name="title_indicaciones">Indicaciones básicas</string>
+    <string name="contenido_indicaciones">El panel de administrador le permite añadir, borrar o actualizar contactos
+        para que los vea el adulto mayor. &#xD; Para entrar al panel administrador por primera vez,
+        deje ambos espacios en blanco y presione acceder.&#xD; En la sección de datos del administradordel panel,
+        puede cambiar el nombre del administrador y contraseña,
+        para evitar que alguien cambie los datos sin su permiso.</string>
+    <string name="title_busquedas">Tips para busquedas</string>
+    <string name="contenido_busquedas"> Por medio del botón del menu inicial puede hacer una busqueda por voz.
+        Para buscar un contacto solo diga su nombre claramente.
+        Para llamar a alguien, diga la palabra "llamar" y luego el nombre del contacto</string>
+    <string name="tipo_de_contacto">Tipo de contacto</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package Modelos;
+package itesm.mx.red_contactos_am.Modelos;
 
 import android.content.Context;
 import android.view.View;
