@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Red-Contactos-AM</string>
     <string name="id_contacto">ID:</string>
-    <string name="nombre_contacto">Nombre:</string>
-    <string name="telefono_contacto">Telefono:</string>
+    <string name="nombre_contacto">Nombre</string>
+    <string name="telefono_contacto">Teléfono</string>
     <string name="tomar_foto">Tomar foto</string>
     <string name="add_text">Add</string>
     <string name="find_text">Find</string>
@@ -19,7 +19,7 @@
         <item>Que tengas un buen dia</item>
     </string-array>
     <string name="title_activity_add_contact">AddContactActivity</string>
-    <string name="emergencia">Emergencia</string>
+    <string name="emergencia">Emergencias</string>
     <string name="contactos">Contactos</string>
     <string name="salud">Salud</string>
     <string name="proveedores">Proveedores</string>
@@ -28,31 +28,50 @@
     <string name="datos_del_administrador">Datos del administrador</string>
     <string name="cambiar_contrase_a">Cambiar contraseña</string>
     <string name="actualizar_contacto">Actualizar contacto</string>
-    <string name="borrar_contactos">Borrar contactos</string>
+    <string name="borrar_contactos">Borrar contacto</string>
     <string name="agregar_contacto">Agregar contacto</string>
     <string name="title_activity_password">PasswordActivity</string>
     <string name="tvAvisoInfoAdmin">AVISO: Mediante estos datos se configura el botón de marcación rápida del menú
         y la contraseña al panel de administrador. No olvide la contraseña que ponga y
         procure que sea un teléfono que pueda ser contestado en caso de emergencias.</string>
     <string name="informaci_n_del_administrador">Información del administrador</string>
-    <string name="telefono_del_administrador">Telefono del administrador</string>
+    <string name="telefono_del_administrador">Teléfono del administrador</string>
     <string name="selecciona_un_mensaje_preestablecido">Selecciona un mensaje preestablecido</string>
     <string name="o_escribe_un_mensaje">o escribe un mensaje</string>
     <string name="indicaciones_b_sicas">Indicaciones básicas</string>
 
-    <string name="title_activity_information">InformationActivity</string>
-    <string name="title_mensaje">Mensaje</string>
-    <string name="contenido_mensaje">Mensaje para todas las personas que usen el app</string>
+    <string name="title_activity_information">Información de la app</string>
+    <string name="title_mensaje">Objetivo de la aplicación</string>
+    <string name="contenido_mensaje">
+        El propósito de esta aplicación es facilitar las tareas cotidianas de los adultos mayores
+        e incrementar su calidad de vida. \n \n
+        La aplicación hace accesible los contactos principales facilitando que esten conectados
+        y que con un botón facilmente puedan estar en comunicacion con alguien (interconectados).</string>
     <string name="title_indicaciones">Indicaciones básicas</string>
-    <string name="contenido_indicaciones">El panel de administrador le permite añadir, borrar o actualizar contactos
-        para que los vea el adulto mayor. &#xD; Para entrar al panel administrador por primera vez,
-        deje ambos espacios en blanco y presione acceder.&#xD; En la sección de datos del administradordel panel,
-        puede cambiar el nombre del administrador y contraseña,
+    <string name="contenido_indicaciones">
+        La pantalla principal contiene 6 botones que clasifican los contactos:\n \n
+        Amarillo: Marcación rápida al teléfono del administrador o por defecto a 911 \n
+        Azul: Muestra todos los contactos\n
+        Rojo: Muestra solo los contactos relacionados con emergencias\n
+        Pantone o rosa: Muestra solo los contactos relacionados con salud \n
+        Verde: Muestra solo los contactos relacionados con proveedores (comida, medicamentos, etc.)\n
+        Naranja: Muestra solo los contactos relacionados con la familia del adulto mayor. \n\n
+        El panel de administrador le permite añadir, borrar o actualizar contactos
+        para que los vea el adulto mayor. \n
+        Para entrar al panel administrador por primera vez, deje ambos espacios en blanco y presione acceder.\n \n
+        En la sección de datos del administrador del panel, puede cambiar el nombre del administrador y contraseña,
         para evitar que alguien cambie los datos sin su permiso.</string>
     <string name="title_busquedas">Tips para busquedas</string>
-    <string name="contenido_busquedas"> Por medio del botón del menu inicial puede hacer una busqueda por voz.
-        Para buscar un contacto solo diga su nombre claramente.
-        Para llamar a alguien, diga la palabra "llamar" y luego el nombre del contacto</string>
+    <string name="contenido_busquedas"> Por medio del botón amarillo cuadrado del menú inicial puede hacer una búsqueda por voz.\n
+        Para buscar un contacto solo diga su nombre claramente. \n \n
+        Para llamar a alguien, diga la palabra "llamar o llama" y luego el nombre del contacto \n
+        Puedes buscar por categoría si dices una de las siguientes palabras clave para cada categoría:\n \n
+        Familia: "familia", "hijo", "hija", "hijos", "nietos", "nieto", "nieta", "sobrina", "sobrino", "sobrinos", "hermanos", "hermana", "hermano", "papá", "mamá", "primos", "primo", "prima\n
+        Proveedores: "proveedores", "medicina", "comida", "agua", "hambre", "sed", "medicinas", "medicamento", "medicamentos", "pastillas"\n
+        Emergencias: "emergencia", "peligro", "ayuda", "ayudenme"\n
+        Salud: "salud", "doctor", "doctora", "enfermero", "enfermera", "medico", "medicos", "cirujano", "especialista"
+        </string>
     <string name="tipo_de_contacto">Tipo de contacto</string>
+    <string name="lista_vacioa">Lista de contactos vacia</string>
 
 </resources>

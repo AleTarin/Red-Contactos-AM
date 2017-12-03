@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -26,6 +27,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -33,6 +35,7 @@ import itesm.mx.red_contactos_am.Modelos.Contacto;
 import itesm.mx.red_contactos_am.Modelos.ContactoAdapter;
 import itesm.mx.red_contactos_am.Modelos.ContactoAdapterCelda;
 import itesm.mx.red_contactos_am.Modelos.ContactoOperations;
+import itesm.mx.red_contactos_am.Utils.SearchUtils;
 
 //import itesm.mx.red_contactos_am.itesm.mx.red_contactos_am.Modelos.Contacto;
 //import itesm.mx.red_contactos_am.itesm.mx.red_contactos_am.Modelos.ContactoAdapter;
@@ -45,16 +48,22 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
     ContactoAdapterCelda contactosAdapter;
     GridView gv;
     String categoria;
+    TextView tvMensaje;
+    static  final  int ACTUALIZAR_CONTACT_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Todos");
         setContentView(R.layout.activity_contactos);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         dao = new ContactoOperations(this);
         dao.open();
 
         gv = (GridView) findViewById(R.id.gridview);
+        tvMensaje = (TextView) findViewById(R.id.tv_mensaje_contactos);
         ArrayList<Contacto> listContactos = showProducts();
 
         contactosAdapter = new ContactoAdapterCelda(this, listContactos);
@@ -96,13 +105,23 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
             categoria = intent.getStringExtra("categoria");
         }
 
-        setTitle(categoria);
+        if (!categoria.isEmpty()){
+            setTitle(categoria);
+        }else{
+            setTitle("Todos");
+        }
         ArrayList<Contacto> productList;
 
         if (categoria.isEmpty() || categoria.contains("contacto")){
             productList = dao.getAllContacts();
         }else{
             productList = dao.getAllContactsByCategory(categoria);
+        }
+
+        if (productList.isEmpty()){
+            tvMensaje.setVisibility(View.VISIBLE);
+        }else{
+            tvMensaje.setVisibility(View.GONE);
         }
 
         if (productList != null){
@@ -125,8 +144,9 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
                         public void onClick(DialogInterface dialog, int whichButton) {
                             dao.deleteContactByID(contacto);
                             Toast.makeText(getApplicationContext(), "Contacto eliminado", Toast.LENGTH_SHORT).show();
+                            contactosAdapter = new ContactoAdapterCelda(getApplicationContext(), showProducts());
                             contactosAdapter.notifyDataSetChanged();
-                            finish();
+                            gv.setAdapter(contactosAdapter);
                         }})
                     .setNegativeButton(android.R.string.no, null).show();
 
@@ -134,17 +154,25 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
             Intent intent;
             if (Objects.equals(categoria, "Actualizar contacto")){
                 intent = new Intent(contactosActivity.this, ActualizarActivity.class);
+                Contacto contacto = contactosAdapter.getItem(position);
+                intent.putExtra("id", contacto.getId());
+                intent.putExtra("name", contacto.getsName());
+                intent.putExtra("telefono", contacto.getsTelefono());
+                intent.putExtra("foto", contacto.getByPicture());
+                String category = contacto.getsCategoria();
+                intent.putExtra("categoria", category);
+                startActivityForResult(intent, ACTUALIZAR_CONTACT_REQUEST);
             }else{
                 intent = new Intent(contactosActivity.this, ContactInfoActivity.class);
+                Contacto contacto = contactosAdapter.getItem(position);
+                intent.putExtra("id", contacto.getId());
+                intent.putExtra("name", contacto.getsName());
+                intent.putExtra("telefono", contacto.getsTelefono());
+                intent.putExtra("foto", contacto.getByPicture());
+                String category = contacto.getsCategoria();
+                intent.putExtra("categoria", category);
+                startActivity(intent);
             }
-            Contacto contacto = contactosAdapter.getItem(position);
-            intent.putExtra("id", contacto.getId());
-            intent.putExtra("name", contacto.getsName());
-            intent.putExtra("telefono", contacto.getsTelefono());
-            intent.putExtra("foto", contacto.getByPicture());
-            String category = contacto.getsCategoria();
-            intent.putExtra("categoria", category);
-            startActivity(intent);
         }
     }
 
@@ -176,87 +204,116 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void busqueda(String resultado) {
-        //Arreglos con las palabras clave de busqueda por categoria
-        String[] proveedoresKey = {"proveedores", "medicina", "comida", "agua", "hambre", "sed", "medicinas", "medicamento"};
-        String[] saludKey = {"salud", "doctor", "enfermero", "enfermera", "medico", "medicos" };
-        String[] emergenciaKey = {"emergencia", "peligro", "ayuda"};
-        String[] familiaKey = {"familia", "hijo", "hija", "hijos", "nietos", "nieto", "nieta", "sobrina", "sobrino", "sobrinos", "hermanos", "hermana", "hermano"};
+
+        //Normalizar el resultados para comparar
+        resultado = new SearchUtils().normalize(resultado);
+
+        //Variables de apoyo
+        boolean swContacto = false;
+        boolean swLlamada = false;
+        String categoria = null;
 
         Contacto contactoResultado = null;
-        String[] arrayResultados = resultado.split(" ");
+        ArrayList<Contacto> ArrayContactos = null;
 
-        for (int i=0; i<arrayResultados.length - 1 ; i++){
-            contactoResultado = dao.findContact(arrayResultados[i]);
-            if (contactoResultado == null){
-                contactoResultado = dao.findContact(arrayResultados[i] + " " + arrayResultados[i + 1]);
-            }
-            if (contactoResultado == null){
-                contactoResultado = dao.findContact(arrayResultados[i] + " " + arrayResultados[i + 1] + " " + arrayResultados[i + 2]);
-            }
-            if (contactoResultado != null){
-                if (resultado.toLowerCase().contains("llamar") || resultado.toLowerCase().contains("llama")){
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+ contactoResultado.getsTelefono()));
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        //request permission from user if the app hasn't got the required permission
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.CALL_PHONE},   //request specific permission from user
-                                10);
-                        return;
-                    }else {     //have got permission
-                        try{
-                            startActivity(callIntent);  //call activity and make phone call
-                        }
-                        catch (android.content.ActivityNotFoundException ex){
-                            Toast.makeText(getApplicationContext(),"yourActivity is not founded",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }else{
-                    Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
-                    intent.putExtra("name", contactoResultado.getsName());
-                    intent.putExtra("telefono", contactoResultado.getsTelefono());
-                    intent.putExtra("foto", contactoResultado.getByPicture());
-                    intent.putExtra("categoria", contactoResultado.getsCategoria());
-                    startActivity(intent);
-                }
-            }
+        //Arreglos con las palabras clave de busqueda por categoria
+        String[] proveedoresKey = {"proveedores", "medicina", "comida", "agua", "hambre", "sed", "medicinas", "medicamento", "medicamentos", "pastillas"};
+        String[] saludKey = {"salud", "doctor", "doctora", "enfermero", "enfermera", "medico", "medicos", "cirujano", "especialista"};
+        String[] emergenciaKey = {"emergencia", "peligro", "ayuda", "ayudenme"};
+        String[] familiaKey = {"familia", "hijo", "hija", "hijos", "nietos", "nieto", "nieta", "sobrina", "sobrino", "sobrinos", "hermanos", "hermana", "hermano", "papá", "mamá", "primos", "primo", "prima"};
+
+        //Si contiene las palabras llama o llamar
+        if (resultado.contains("llama") || resultado.contains("llamar")){
+            swLlamada = true;
         }
 
-        if (contactoResultado == null){
-            Intent intent;
-            String resultadoMinusculas = resultado.toLowerCase();
-            for (String keyword : saludKey){
-                if (resultadoMinusculas.contains(keyword)){
-                    intent = new Intent(getApplicationContext(), contactosActivity.class);
-                    intent.putExtra("categoria", "Salud");
-                    startActivity(intent);
+        if (resultado.length() == 0) { // Si la palabra es vacia
+            Toast.makeText(getApplicationContext(), "No se detecto ninguna palabra, intente de nuevo", Toast.LENGTH_SHORT).show();
+            return;
+        }else{
+            // Sino dividir la palabra para buscar similitudes
+            String[] arrayResultados = resultado.split(" ");
+            int num = arrayResultados.length;
+            // Buscar por cada palabra de la oracion
+            for (int i=0; i < arrayResultados.length ; i++){
+                if ( !(ArrayContactos = dao.partialSearchAll(arrayResultados[i])).isEmpty()){
+                    if (ArrayContactos.size() == 1) {
+                        contactoResultado = ArrayContactos.get(0);
+                        swContacto = true;
+                    }else{
+                        ArrayList<Contacto> listContactos = ArrayContactos;
+                        contactosAdapter = new ContactoAdapterCelda(this, ArrayContactos);
+                        contactosAdapter.notifyDataSetChanged();
+                        gv.setAdapter(contactosAdapter);
+                        return;
+                    }
                 }
-            }
-            for (String keyword : familiaKey){
-                if (resultadoMinusculas.contains(keyword)){
-                    intent = new Intent(getApplicationContext(), contactosActivity.class);
-                    intent.putExtra("categoria", "Familia");
-                    startActivity(intent);
-                }
-            }
-            for (String keyword : emergenciaKey){
-                if (resultadoMinusculas.contains(keyword)){
-                    intent = new Intent(getApplicationContext(), contactosActivity.class);
-                    intent.putExtra("categoria", "Emergencias");
-                    startActivity(intent);
-                }
-            }
-            for (String keyword : proveedoresKey){
-                if (resultadoMinusculas.contains(keyword)){
-                    intent = new Intent(getApplicationContext(), contactosActivity.class);
-                    intent.putExtra("categoria", "Proveedores");
-                    startActivity(intent);
-                }
-            }
+                //if ((contactoResultado = dao.partialSearch(arrayResultados[i])) != null){ swContacto = true;}
+                else{ //Sino encontro resultado en contactos provar con categorias
+                    for (String keyword : saludKey)
+                        if (resultado.contains(new SearchUtils().normalize(keyword)))
+                            categoria = "Salud";
+                    for (String keyword : familiaKey)
+                        if (resultado.contains(new SearchUtils().normalize(keyword)))
+                            categoria = "Familia";
+                    for (String keyword : emergenciaKey)
+                        if (resultado.contains(new SearchUtils().normalize(keyword)))
+                            categoria = "Emergencias";
+                    for (String keyword : proveedoresKey)
+                        if (resultado.contains(new SearchUtils().normalize(keyword)))
+                            categoria = "Proveedores";
+                } // Fin else
+            } // Fin for
+        } // Fin else
 
+        // Realizar acciones de acuerdo a los resultados
+        if (swContacto){
+            if (swLlamada){
+                llamada(contactoResultado);
+            }else {
+                Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
+                intent.putExtra("name", contactoResultado.getsName());
+                intent.putExtra("telefono", contactoResultado.getsTelefono());
+                intent.putExtra("foto", contactoResultado.getByPicture());
+                intent.putExtra("categoria", contactoResultado.getsCategoria());
+                startActivity(intent);
+            }
+        }else if (categoria != null){
+            Intent intent = new Intent(getApplicationContext(), contactosActivity.class);
+            intent.putExtra("categoria", categoria);
+            startActivity(intent);
+        } else {
             Toast.makeText(getApplicationContext(),"No se encontro ninguna coincidencia",Toast.LENGTH_SHORT).show();
         }
+    }
 
+
+    public void llamada(Contacto contactoResultado){
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:"+ contactoResultado.getsTelefono()));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            //request permission from user if the app hasn't got the required permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 10);
+            return;
+        }else {//have got permission
+            try{
+                startActivity(callIntent);  //call activity and make phone call
+            }
+            catch (android.content.ActivityNotFoundException ex){
+                Toast.makeText(getApplicationContext(),"yourActivity is not founded",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 

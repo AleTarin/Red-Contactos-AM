@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,6 +50,7 @@ public class ActualizarActivity extends AppCompatActivity  implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actualizar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Actualizar contacto");
 
         coTool = new ContactoOperations(this);
@@ -172,8 +174,7 @@ public class ActualizarActivity extends AppCompatActivity  implements View.OnCli
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
 
-                ImageView imageView = (ImageView) findViewById(R.id.image_foto);
-                imageView.setImageBitmap(bitmap);
+                ivFoto.setImageBitmap(bitmap);
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -183,20 +184,6 @@ public class ActualizarActivity extends AppCompatActivity  implements View.OnCli
                 e.printStackTrace();
             }
 
-
-
-            /*InputStream iStream = null;
-            try {
-                iStream = getContentResolver().openInputStream(uri);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                bImage = getBytes(iStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
@@ -207,9 +194,6 @@ public class ActualizarActivity extends AppCompatActivity  implements View.OnCli
             bImage = stream.toByteArray();
 
         }
-
-
-
     }
 
     private void selectSpinnerValue(Spinner spinner, String myString)
@@ -230,5 +214,16 @@ public class ActualizarActivity extends AppCompatActivity  implements View.OnCli
     }
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

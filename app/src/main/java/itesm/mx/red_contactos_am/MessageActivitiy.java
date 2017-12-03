@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,6 +31,8 @@ public class MessageActivitiy extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_activitiy);
         setTitle("Mandar mensaje");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         Intent intent = getIntent();
         if (intent.getExtras() != null){
@@ -62,6 +65,17 @@ public class MessageActivitiy extends AppCompatActivity implements AdapterView.O
         sms.sendTextMessage(telefono, null, etMensaje.getText().toString(), null, null);
         Toast.makeText(getApplicationContext(), "Mensaje Enviado.",
                 Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

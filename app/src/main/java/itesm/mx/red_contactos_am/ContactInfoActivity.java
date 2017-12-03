@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -29,6 +30,8 @@ public class ContactInfoActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_info);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         ivFoto = (ImageView) findViewById(R.id.iv_Foto_info);
         tvNombre = (TextView) findViewById(R.id.tv_nombre_info);
@@ -112,14 +115,6 @@ public class ContactInfoActivity extends AppCompatActivity implements View.OnCli
              ivFoto.setScaleX(newX);
              ivFoto.setScaleY(newY);
          }
-         /*
-            tvTelefono.setTextSize((float) (textSize + .0002));
-            tvCategoria.setTextSize((float) (textSize + .0002));
-            tvNombre.setTextSize((float) (textSize + .0002));*/
-
-
-         // display a toast to show Zoom In Message on Screen
-            //Toast.makeText(getApplicationContext(),"Zoom In" + x,Toast.LENGTH_SHORT).show();
         }
 
     public void ZoomOut() {
@@ -135,10 +130,15 @@ public class ContactInfoActivity extends AppCompatActivity implements View.OnCli
             ivFoto.setScaleX(newX);
             ivFoto.setScaleY(newY);
         }
-            // display a toast to show Zoom Out Message on Screen
-       /* tvTelefono.setTextSize((float) (textSize - .0002));
-        tvCategoria.setTextSize((float) (textSize - .0002));
-        tvNombre.setTextSize((float) (textSize - .0002));*/
-            //Toast.makeText(getApplicationContext(),"Zoom Out" + x,Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
         }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

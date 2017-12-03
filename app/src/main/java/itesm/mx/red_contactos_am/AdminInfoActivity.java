@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ public class AdminInfoActivity extends AppCompatActivity implements View.OnClick
     private EditText etNombre;
     private EditText etTelefono;
     private EditText etPassword;
+    private EditText etPassword2;
     private SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
@@ -32,6 +34,9 @@ public class AdminInfoActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_info);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Datos del Administrador");
+
 
         preferences = getSharedPreferences(misPreferencias, MODE_PRIVATE);
         String password = preferences.getString(KEY_PASSWORD_ADMIN,defaultPassword);
@@ -41,11 +46,13 @@ public class AdminInfoActivity extends AppCompatActivity implements View.OnClick
         etNombre = (EditText) findViewById(R.id.etNombreInfoAdmin);
         etTelefono = (EditText) findViewById(R.id.etTelefonoInfoAdmin);
         etPassword = (EditText) findViewById(R.id.etPasswordInfoAdmin);
+        etPassword2 = (EditText) findViewById(R.id.etPasswordInfoAdmin2);
         btnGuardar = (Button) findViewById(R.id.btnGuardarAdminInfo);
 
         etNombre.setText(nombre);
         etTelefono.setText(telefono);
         etPassword.setText(password);
+        etPassword2.setText(password);
 
         editor = preferences.edit();
 
@@ -57,14 +64,30 @@ public class AdminInfoActivity extends AppCompatActivity implements View.OnClick
         String stNombre = etNombre.getText().toString();
         String stTelefono = etTelefono.getText().toString();
         String stPassword = etPassword.getText().toString();
+        String stPassword2 = etPassword2.getText().toString();
 
-        editor.putString(KEY_NOMBRE_ADMIN, stNombre );
-        editor.putString(KEY_TELEFONO_ADMIN, stTelefono);
-        editor.putString(KEY_PASSWORD_ADMIN, stPassword);
+        if (!stPassword.equals(stPassword2) ){
+            Toast.makeText(getApplicationContext(),"Contraseña no coincide",Toast.LENGTH_SHORT).show();
+        }else{
+            editor.putString(KEY_NOMBRE_ADMIN, stNombre );
+            editor.putString(KEY_TELEFONO_ADMIN, stTelefono);
+            editor.putString(KEY_PASSWORD_ADMIN, stPassword);
 
-        editor.commit();
+            editor.commit();
 
-        Toast.makeText(getApplicationContext(),"Datos guardados, recuerdelos bien",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Datos guardados",Toast.LENGTH_SHORT).show();
+        }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
