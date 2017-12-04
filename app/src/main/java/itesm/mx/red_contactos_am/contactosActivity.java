@@ -315,5 +315,13 @@ public class contactosActivity extends AppCompatActivity implements AdapterView.
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onResume() {
+        dao.open();
+        super.onResume();
+        contactosAdapter = new ContactoAdapterCelda(getApplicationContext(), showProducts());
+        contactosAdapter.notifyDataSetChanged();
+        gv.setAdapter(contactosAdapter);
+    }
 }
 
