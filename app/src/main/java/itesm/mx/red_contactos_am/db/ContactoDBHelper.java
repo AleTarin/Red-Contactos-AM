@@ -12,7 +12,7 @@ import android.util.Log;
 public class ContactoDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ContactoDB.itesm.mx.red_contactos_am.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 7;
 
     public ContactoDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,6 +26,7 @@ public class ContactoDBHelper extends SQLiteOpenHelper {
 
                         DataBaseSchema.ContactoTable._ID + " INTEGER PRIMARY KEY, " +
                         DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE + " TEXT NOT NULL, " +
+                        DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE_NORMALIZED + " TEXT NOT NULL, " +
                         DataBaseSchema.ContactoTable.COLUMN_NAME_TELEFONO + " TEXT NOT NULL, " +
                         DataBaseSchema.ContactoTable.COLUMN_NAME_IMAGEN + " BLOB, " +
                         DataBaseSchema.ContactoTable.COLUMN_NAME_CATEGORIA + " TEXT )";

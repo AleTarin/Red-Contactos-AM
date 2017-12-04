@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,6 +52,8 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_add_contact);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Añadir contacto");
 
         coTool = new ContactoOperations(this);
@@ -137,16 +140,9 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
                     finish();
 
                 }
-
-
                 break;
-
-
-
         }
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -171,20 +167,6 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
                 e.printStackTrace();
             }
 
-
-
-            /*InputStream iStream = null;
-            try {
-                iStream = getContentResolver().openInputStream(uri);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                bImage = getBytes(iStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
@@ -195,11 +177,7 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
             bImage = stream.toByteArray();
 
         }
-
-
-
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -209,16 +187,16 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
     }
-/*
-    private byte[] getBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
 
-        int len = 0;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
         }
-        return byteBuffer.toByteArray();
-    }*/
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

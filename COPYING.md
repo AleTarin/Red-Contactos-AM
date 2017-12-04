@@ -1,3 +1,16 @@
+Copyright.© Instituto Tecnológico y de Estudios Superiores de Monterrey, México, 2016.
+
+Red De Contactos de adultos mayores
+Aplicacion web que guarda contactos y los despliega en una forma sencilla y facil de utilizar
+dirigido a los adultos mayores que tienen problemas de memoria y/o visuales.
+
+Este proyecto no tiene ninguna garantia.
+Este proyecto es software libre y de libre distribucion, siempre que se haga referencia a la fuente.
+
+Para mas informacion contactar al correo "ale.tarin10@gmail.com"
+
+----------
+
 ### GNU GENERAL PUBLIC LICENSE
 
 Version 3, 29 June 2007

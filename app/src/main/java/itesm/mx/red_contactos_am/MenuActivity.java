@@ -1,11 +1,13 @@
 package itesm.mx.red_contactos_am;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -23,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import itesm.mx.red_contactos_am.Modelos.Contacto;
+import itesm.mx.red_contactos_am.Modelos.ContactoAdapterCelda;
 import itesm.mx.red_contactos_am.Modelos.ContactoOperations;
+import itesm.mx.red_contactos_am.Utils.SearchUtils;
 
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
@@ -32,6 +36,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton imageButton;
     TextView tvResultadoVoz;
     Button btnContactos,btnEmergencia,btnProvedores,btnPersonal, btnFamilia, btnAdmin;
+    AlertDialog dialog;
+    AlertDialog.Builder mBuilder;
 
     //Shared Preferences KEY and defaults
     static final String KEY_NOMBRE_ADMIN = "KEY_NOMBRE_ADMIN";
@@ -56,6 +62,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         dao = new ContactoOperations(this);
         dao.open();
 
+        mBuilder = new AlertDialog.Builder(MenuActivity.this);
+        dialog = mBuilder.create();
+
+
         btnContactos = (Button) findViewById(R.id.btnContactos);
         btnEmergencia = (Button) findViewById(R.id.btnEmergencia);
         btnProvedores = (Button) findViewById(R.id.btnProvedores);
@@ -72,6 +82,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         btnPersonal.setOnClickListener(this);
         btnFamilia.setOnClickListener(this);
         imageButton.setOnClickListener(this);
+
     }
 
     @Override
@@ -84,9 +95,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v){
             String categoria = "";
             Intent intent;
+        int vidur = 100;
+        Vibrator vi = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 
             switch (v.getId()){
                 case R.id.btnVoz:
+                    vi.vibrate(vidur);
                     intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, Locale.getDefault());
@@ -98,12 +112,14 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
                     break;
                 case R.id.btnContactos:
+                    vi.vibrate(vidur);
                     categoria = "";
                     intent = new Intent(getApplicationContext(), contactosActivity.class);
                     intent.putExtra("categoria", categoria);
                     startActivity(intent);
                     break;
-                case R.id.btn_admin_menu: //TODO: Change Emergencia to admin button and add settings
+                case R.id.btn_admin_menu:
+                    vi.vibrate(vidur);
                     preferences = getSharedPreferences(misPreferencias, MODE_PRIVATE);
                     String number = preferences.getString(KEY_TELEFONO_ADMIN, defaultTelefono);
                     intent = new Intent(Intent.ACTION_CALL);
@@ -114,24 +130,28 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(intent);
                     break;
                 case R.id.btnProvedores:
+                    vi.vibrate(vidur);
                     categoria = "Proveedores";
                     intent = new Intent(getApplicationContext(), contactosActivity.class);
                     intent.putExtra("categoria", categoria);
                     startActivity(intent);
                     break;
                 case R.id.btnSalud:
+                    vi.vibrate(vidur);
                     categoria = "Salud";
                     intent = new Intent(getApplicationContext(), contactosActivity.class);
                     intent.putExtra("categoria", categoria);
                     startActivity(intent);
                     break;
                 case R.id.btnEmergencia:
+                    vi.vibrate(vidur);
                     categoria = "Emergencias";
                     intent = new Intent(getApplicationContext(), contactosActivity.class);
                     intent.putExtra("categoria", categoria);
                     startActivity(intent);
                     break;
                 case R.id.btnFamilia:
+                    vi.vibrate(vidur);
                     categoria = "Familia";
                     intent = new Intent(getApplicationContext(), contactosActivity.class);
                     intent.putExtra("categoria", categoria);
@@ -157,88 +177,80 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void busqueda(String resultado) {
-        //Arreglos con las palabras clave de busqueda por categoria
-        String[] proveedoresKey = {"proveedores", "medicina", "comida", "agua", "hambre", "sed", "medicinas", "medicamento"};
-        String[] saludKey = {"salud", "doctor", "enfermero", "enfermera", "medico", "medicos" };
-        String[] emergenciaKey = {"emergencia", "peligro", "ayuda"};
-        String[] familiaKey = {"familia", "hijo", "hija", "hijos", "nietos", "nieto", "nieta", "sobrina", "sobrino", "sobrinos", "hermanos", "hermana", "hermano"};
+
+        //Normalizar el resultados para comparar
+        resultado = new SearchUtils().normalize(resultado);
+
+        //Variables de apoyo
+        boolean swContacto = false;
+        boolean swLlamada = false;
+        String categoria = null;
 
         Contacto contactoResultado = null;
-        String[] arrayResultados = resultado.split(" ");
+        ArrayList<Contacto> ArrayContactos = null;
 
-        for (int i=0; i<arrayResultados.length - 1 ; i++){
-            contactoResultado = dao.findContact(arrayResultados[i]);
-            if (contactoResultado == null){
-                contactoResultado = dao.findContact(arrayResultados[i] + " " + arrayResultados[i + 1]);
-            }
-            if (contactoResultado == null){
-                contactoResultado = dao.findContact(arrayResultados[i] + " " + arrayResultados[i + 1] + " " + arrayResultados[i + 2]);
-            }
-            if (contactoResultado != null){
-                if (resultado.toLowerCase().contains("llamar") || resultado.toLowerCase().contains("llama")){
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+ contactoResultado.getsTelefono()));
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        //request permission from user if the app hasn't got the required permission
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.CALL_PHONE},   //request specific permission from user
-                                10);
-                        return;
-                    }else {     //have got permission
-                        try{
-                            startActivity(callIntent);  //call activity and make phone call
-                        }
-                        catch (android.content.ActivityNotFoundException ex){
-                            Toast.makeText(getApplicationContext(),"yourActivity is not founded",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }else{
-                    Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
-                    intent.putExtra("name", contactoResultado.getsName());
-                    intent.putExtra("telefono", contactoResultado.getsTelefono());
-                    intent.putExtra("foto", contactoResultado.getByPicture());
-                    intent.putExtra("categoria", contactoResultado.getsCategoria());
-                    startActivity(intent);
-                }
-            }
+        //Arreglos con las palabras clave de busqueda por categoria
+        String[] proveedoresKey = {"proveedores", "medicina", "comida", "agua", "hambre", "sed", "medicinas", "medicamento", "medicamentos", "pastillas"};
+        String[] saludKey = {"salud", "doctor", "doctora", "enfermero", "enfermera", "medico", "medicos", "cirujano", "especialista"};
+        String[] emergenciaKey = {"emergencia", "peligro", "ayuda", "ayudenme"};
+        String[] familiaKey = {"familia", "hijo", "hija", "hijos", "nietos", "nieto", "nieta", "sobrina", "sobrino", "sobrinos", "hermanos", "hermana", "hermano", "papá", "mamá", "primos", "primo", "prima"};
+
+        //Si contiene las palabras llama o llamar
+        if (resultado.contains("llama") || resultado.contains("llamar")){
+            swLlamada = true;
         }
 
-        if (contactoResultado == null){
-            Intent intent;
-            String resultadoMinusculas = resultado.toLowerCase();
-            for (String keyword : saludKey){
-                if (resultadoMinusculas.contains(keyword)){
-                    intent = new Intent(getApplicationContext(), contactosActivity.class);
-                    intent.putExtra("categoria", "Salud");
-                    startActivity(intent);
+        if (resultado.length() == 0) { // Si la palabra es vacia
+            Toast.makeText(getApplicationContext(), "No se detecto ninguna palabra, intente de nuevo", Toast.LENGTH_SHORT).show();
+            return;
+        }else{
+            // Sino dividir la palabra para buscar similitudes
+            String[] arrayResultados = resultado.split(" ");
+            int num = arrayResultados.length;
+            // Buscar por cada palabra de la oracion
+            for (int i=0; i < arrayResultados.length ; i++){
+                if ( (contactoResultado = dao.partialSearch(arrayResultados[i])) != null){
+                    swContacto = true;
                 }
-            }
-            for (String keyword : familiaKey){
-                if (resultadoMinusculas.contains(keyword)){
-                    intent = new Intent(getApplicationContext(), contactosActivity.class);
-                    intent.putExtra("categoria", "Familia");
-                    startActivity(intent);
-                }
-            }
-            for (String keyword : emergenciaKey){
-                if (resultadoMinusculas.contains(keyword)){
-                    intent = new Intent(getApplicationContext(), contactosActivity.class);
-                    intent.putExtra("categoria", "Emergencias");
-                    startActivity(intent);
-                }
-            }
-            for (String keyword : proveedoresKey){
-                if (resultadoMinusculas.contains(keyword)){
-                    intent = new Intent(getApplicationContext(), contactosActivity.class);
-                    intent.putExtra("categoria", "Proveedores");
-                    startActivity(intent);
-                }
-            }
+                //if ((contactoResultado = dao.partialSearch(arrayResultados[i])) != null){ swContacto = true;}
+                else{ //Sino encontro resultado en contactos provar con categorias
+                    for (String keyword : saludKey)
+                        if (resultado.contains(new SearchUtils().normalize(keyword)))
+                            categoria = "Salud";
+                    for (String keyword : familiaKey)
+                        if (resultado.contains(new SearchUtils().normalize(keyword)))
+                            categoria = "Familia";
+                    for (String keyword : emergenciaKey)
+                        if (resultado.contains(new SearchUtils().normalize(keyword)))
+                            categoria = "Emergencias";
+                    for (String keyword : proveedoresKey)
+                        if (resultado.contains(new SearchUtils().normalize(keyword)))
+                            categoria = "Proveedores";
+                } // Fin else
+            } // Fin for
+        } // Fin else
 
+        // Realizar acciones de acuerdo a los resultados
+        if (swContacto){
+            if (swLlamada){
+                llamada(contactoResultado);
+            }else {
+                Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
+                intent.putExtra("name", contactoResultado.getsName());
+                intent.putExtra("telefono", contactoResultado.getsTelefono());
+                intent.putExtra("foto", contactoResultado.getByPicture());
+                intent.putExtra("categoria", contactoResultado.getsCategoria());
+                startActivity(intent);
+            }
+        }else if (categoria != null){
+            Intent intent = new Intent(getApplicationContext(), contactosActivity.class);
+            intent.putExtra("categoria", categoria);
+            startActivity(intent);
+        } else {
             Toast.makeText(getApplicationContext(),"No se encontro ninguna coincidencia",Toast.LENGTH_SHORT).show();
         }
-
     }
+
 
     private Boolean checkCallPermission(){
 
@@ -251,7 +263,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-
+        Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
         switch (id){
 
             case R.id.admin:
@@ -280,7 +293,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 mBuilder.setView(mView);
-                AlertDialog dialog = mBuilder.create();
+                dialog = mBuilder.create();
                 dialog.show();
                 break;
             case R.id.menuInfo:
@@ -293,4 +306,28 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
+
+    public void llamada(Contacto contactoResultado){
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:"+ contactoResultado.getsTelefono()));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            //request permission from user if the app hasn't got the required permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 10);
+            return;
+        }else {//have got permission
+            try{
+                startActivity(callIntent);  //call activity and make phone call
+            }
+            catch (android.content.ActivityNotFoundException ex){
+                Toast.makeText(getApplicationContext(),"yourActivity is not founded",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

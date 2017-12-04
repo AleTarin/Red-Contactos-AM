@@ -8,8 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import java.lang.reflect.Array;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
+import itesm.mx.red_contactos_am.Utils.SearchUtils;
 import itesm.mx.red_contactos_am.db.ContactoDBHelper;
 import itesm.mx.red_contactos_am.db.DataBaseSchema;
 
@@ -40,10 +43,13 @@ public class ContactoOperations {
     }
 
     public long addContact(Contacto contact) {
+        String name_normalized = new SearchUtils().normalize(contact.getsName());
+
         long newRowId = 0;
         try {
             ContentValues values = new ContentValues();
             values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE, contact.getsName());
+            values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE_NORMALIZED, name_normalized);
             values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_TELEFONO, contact.getsTelefono());
             values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_IMAGEN, contact.getByPicture());
             values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_CATEGORIA, contact.getsCategoria());
@@ -102,10 +108,35 @@ public class ContactoOperations {
     }
 
     public  Contacto findContact (String contactName) { // Buscar por nombre
+        String name_normalized = new SearchUtils().normalize(contactName);
+        String query = "Select * FROM " +
+            DataBaseSchema.ContactoTable.TABLE_NAME +
+            " WHERE lower(" + DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE_NORMALIZED +
+            ") = \"" + name_normalized + "\"";
+        try{
+            Cursor cursor = db.rawQuery(query, null);
+            contact = null;
+            if (cursor.moveToFirst()){
+                contact = new Contacto(Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                        cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getBlob(4),
+                    cursor.getString(5));
+            }
+            cursor.close();
+        }catch (SQLException e ){
+            Log.e("SQLFind", e.toString());
+        }
+        return contact;
+    }
+
+    public  Contacto partialSearch (String contactName) { // Buscar por nombre parcialmente
+        String name_normalized = new SearchUtils().normalize(contactName);
         String query = "Select * FROM " +
                 DataBaseSchema.ContactoTable.TABLE_NAME +
-                " WHERE lower(" + DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE +
-                ") = \"" + contactName.toLowerCase() + "\"";
+                " WHERE " + DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE_NORMALIZED +
+                " LIKE \"%" + name_normalized + "%\"";
         try{
             Cursor cursor = db.rawQuery(query, null);
             contact = null;
@@ -113,14 +144,43 @@ public class ContactoOperations {
                 contact = new Contacto(Integer.parseInt(cursor.getString(0)),
                         cursor.getString(1),
                         cursor.getString(2),
-                        cursor.getBlob(3),
-                        cursor.getString(4));
+                        cursor.getString(3),
+                        cursor.getBlob(4),
+                        cursor.getString(5));
             }
             cursor.close();
         }catch (SQLException e ){
             Log.e("SQLFind", e.toString());
         }
         return contact;
+    }
+
+    public ArrayList<Contacto> partialSearchAll (String contactName) { // Buscar por nombre parcialmente
+        ArrayList<Contacto> listaContactos = new ArrayList<>();
+        String name_normalized = new SearchUtils().normalize(contactName);
+        String query = "Select * FROM " +
+                DataBaseSchema.ContactoTable.TABLE_NAME +
+                " WHERE " + DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE_NORMALIZED +
+                " LIKE \"%" + name_normalized + "%\"";
+        try{
+            Cursor cursor = db.rawQuery(query, null);
+            contact = null;
+            if (cursor.moveToFirst()) {
+                do {
+                    contact = new Contacto(Integer.parseInt(cursor.getString(0)),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            cursor.getBlob(4),
+                            cursor.getString(5));
+                    listaContactos.add(contact);
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+        }catch (SQLException e ){
+            Log.e("SQLFind", e.toString());
+        }
+        return listaContactos;
     }
 
     public ArrayList<Contacto> getAllContacts() {
@@ -134,9 +194,9 @@ public class ContactoOperations {
                     contact = new Contacto(Integer.parseInt(cursor.getString(0)),
                             cursor.getString(1),
                             cursor.getString(2),
-                            cursor.getBlob(3),
-                            cursor.getString(4));
-
+                            cursor.getString(3),
+                            cursor.getBlob(4),
+                            cursor.getString(5));
                     listaContactos.add(contact);
                 } while (cursor.moveToNext());
             }
@@ -160,8 +220,9 @@ public class ContactoOperations {
                     contact = new Contacto(Integer.parseInt(cursor.getString(0)),
                             cursor.getString(1),
                             cursor.getString(2),
-                            cursor.getBlob(3),
-                            cursor.getString(4));
+                            cursor.getString(3),
+                            cursor.getBlob(4),
+                            cursor.getString(5));
                     listaContactos.add(contact);
                 } while (cursor.moveToNext());
             }
@@ -173,9 +234,11 @@ public class ContactoOperations {
     }
 
     public boolean actualizarContacto(Contacto contacto){
+        String name_normalized = new SearchUtils().normalize(contacto.getsName());
         try {
             ContentValues values = new ContentValues();
             values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE, contacto.getsName());
+            values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_NOMBRE_NORMALIZED, name_normalized);
             values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_TELEFONO, contacto.getsTelefono());
             values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_IMAGEN, contacto.getByPicture());
             values.put(DataBaseSchema.ContactoTable.COLUMN_NAME_CATEGORIA, contacto.getsCategoria());
@@ -187,7 +250,5 @@ public class ContactoOperations {
         }
         return true;
     }
-
-
 }
 

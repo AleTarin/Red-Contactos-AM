@@ -15,6 +15,7 @@ DataBaseSchema {
     public static class ContactoTable implements BaseColumns{
         public static final String TABLE_NAME = "Contacto";
         public static final String COLUMN_NAME_NOMBRE = "Nombre";
+        public static final String COLUMN_NAME_NOMBRE_NORMALIZED = "Normalized";
         public static final String COLUMN_NAME_TELEFONO = "Telefono";
         public static final String COLUMN_NAME_IMAGEN = "Imagen";
         public static final String COLUMN_NAME_CATEGORIA = "Categoria";

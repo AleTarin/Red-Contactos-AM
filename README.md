@@ -32,7 +32,7 @@ Correo personal:    ivan.escalante.m@gmail.com
 
 ------------------------------------------------------------------
 ### Fecha de ultima modificacion
-03/10/17
+02/12/17
 
 -------------------------------------------------------------------
 ### Caracteristicas
