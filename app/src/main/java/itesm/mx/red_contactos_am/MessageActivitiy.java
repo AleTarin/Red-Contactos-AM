@@ -121,6 +121,7 @@ public class MessageActivitiy extends AppCompatActivity implements AdapterView.O
                 }
             }
         }
+        finish();
     }
 
     @SuppressWarnings("deprecation")
