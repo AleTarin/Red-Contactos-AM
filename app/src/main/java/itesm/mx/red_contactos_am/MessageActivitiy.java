@@ -23,14 +23,14 @@ import android.widget.Toast;
 
 import itesm.mx.red_contactos_am.Modelos.ContactoAdapterCelda;
 
-public class MessageActivitiy extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class MessageActivitiy extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ListView lv;
     String sMensaje, telefono;
     Button btnEnviar;
     EditText etMensaje;
 
-    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 5 ;
     private static final int PERMISSION_REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,23 +51,23 @@ public class MessageActivitiy extends AppCompatActivity implements AdapterView.O
 
 
         lv.setOnItemClickListener(this);
-        btnEnviar.setOnClickListener(this);
+        btnEnviar.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                if (isAirplaneModeOn(getApplicationContext())){
+                    Toast.makeText(getApplicationContext(), "Mensaje no enviado, verifique su conexión.",
+                            Toast.LENGTH_LONG).show();
+                }else{
+                    sendSMSMessage();
+                }
+            }
+        });
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
          sMensaje = (String)parent.getItemAtPosition(position);
          etMensaje.setText(sMensaje);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (isAirplaneModeOn(getApplicationContext())){
-            Toast.makeText(getApplicationContext(), "Mensaje no enviado, verifique su conexión.",
-                    Toast.LENGTH_LONG).show();
-        }else{
-            sendSMS();
-        }
     }
 
 
@@ -81,12 +81,13 @@ public class MessageActivitiy extends AppCompatActivity implements AdapterView.O
 
 
     protected void sendSMSMessage() {
+        sMensaje = etMensaje.getText().toString();
  
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.SEND_SMS)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.SEND_SMS},
@@ -112,12 +113,10 @@ public class MessageActivitiy extends AppCompatActivity implements AdapterView.O
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(telefono, null, etMensaje.getText().toString(), null, null);
-                    Toast.makeText(getApplicationContext(), "SMS enviado",
-                            Toast.LENGTH_LONG).show();
+                    smsManager.sendTextMessage(telefono, null, sMensaje, null, null);
+                    Toast.makeText(getApplicationContext(), "SMS enviado", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            "SMS no se envió", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "SMS no se envió", Toast.LENGTH_LONG).show();
                     return;
                 }
             }

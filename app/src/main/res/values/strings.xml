@@ -36,8 +36,8 @@
         procure que sea un teléfono que pueda ser contestado en caso de emergencias.</string>
     <string name="informaci_n_del_administrador">Información del administrador</string>
     <string name="telefono_del_administrador">Teléfono del administrador</string>
-    <string name="selecciona_un_mensaje_preestablecido">Selecciona un mensaje preestablecido</string>
-    <string name="o_escribe_un_mensaje">o escribe un mensaje</string>
+    <string name="selecciona_un_mensaje_preestablecido">O selecciona un mensaje preestablecido</string>
+    <string name="o_escribe_un_mensaje">Escribe un mensaje</string>
     <string name="indicaciones_b_sicas">Indicaciones básicas</string>
 
     <string name="title_activity_information">Información de la app</string>
